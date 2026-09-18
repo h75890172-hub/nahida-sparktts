@@ -1,0 +1,9 @@
+*.wav
+__pycache__/
+.venv/
+genshin/
+genshin_ov/
+outputs/
+.cache/
+*.pid
+*.log

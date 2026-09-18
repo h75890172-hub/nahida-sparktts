@@ -1,0 +1,12 @@
+Nahida Spark-TTS
+
+This repository contains orchestration code and modified copies of Spark-TTS
+components.
+
+Spark-TTS
+Copyright (c) 2025 SparkAudio
+Licensed under the Apache License, Version 2.0.
+
+The character model and base model are downloaded separately and are not
+distributed by this repository. Character names, game audio, and related
+assets belong to their respective owners.
