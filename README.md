@@ -310,10 +310,18 @@ push v* 标签
 ghcr.io/project-maintainer/nahida-sparktts:main
 ```
 
-私有镜像拉取前需要登录：
+私有镜像使用一键脚本完成登录、拉取和启动：
 
 ```powershell
-echo $env:GITHUB_TOKEN | docker login ghcr.io -u project-maintainer --password-stdin
+.\Deploy-GHCR.bat up
+```
+
+停止、查看日志或仅拉取镜像：
+
+```powershell
+.\Deploy-GHCR.bat down
+.\Deploy-GHCR.bat logs
+.\Deploy-GHCR.bat pull
 ```
 
 ## 常见问题
