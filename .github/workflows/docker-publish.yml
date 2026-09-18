@@ -45,6 +45,9 @@ jobs:
           context: .
           file: Dockerfile
           push: true
+          build-args: |
+            PYTORCH_IMAGE=pytorch/pytorch:2.7.1-cuda11.8-cudnn9-runtime
+            PIP_INDEX_URL=https://pypi.org/simple
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

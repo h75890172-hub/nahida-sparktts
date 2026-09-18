@@ -1,14 +1,18 @@
-FROM pytorch/pytorch:2.7.1-cuda11.8-cudnn9-runtime
+ARG PYTORCH_IMAGE=pytorch/pytorch:2.7.1-cuda11.8-cudnn9-runtime
+FROM ${PYTORCH_IMAGE}
 
 ENV PYTHONUNBUFFERED=1
 ENV PIP_NO_CACHE_DIR=1
 ENV HF_HUB_DISABLE_XET=1
 
+ARG PIP_INDEX_URL=https://pypi.org/simple
+
 WORKDIR /app
 
 COPY requirements.txt requirements-docker.txt ./
 RUN python -m pip install --upgrade pip \
-    && python -m pip install -r requirements.txt -r requirements-docker.txt
+    && python -m pip install --index-url "${PIP_INDEX_URL}" \
+        -r requirements.txt -r requirements-docker.txt
 
 COPY infer.py nahida_tts.py nahida_webui.py ./
 COPY sparktts ./sparktts
