@@ -114,6 +114,15 @@ GPU support. The container mounts:
 The GitHub Actions workflow builds and publishes the image to GitHub Container
 Registry on pushes to `main`, version tags, or manual runs.
 
+After authenticating GitHub CLI, publish the repository:
+
+```powershell
+.\Push-To-GitHub.bat
+```
+
+The default repository name is `nahida-sparktts` and the default visibility is
+private. Pass `-Visibility public` to create a public repository.
+
 ## Audio Feature Comparison
 
 The comparison uses the first 30 seconds of each public reference sample with
