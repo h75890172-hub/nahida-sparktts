@@ -96,12 +96,18 @@ class NahidaTTS:
             torch.backends.cuda.matmul.allow_tf32 = True
             torch.backends.cudnn.allow_tf32 = True
 
+        model_dtype = torch.float16 if self.device.startswith("cuda") else torch.float32
         self.model = AutoModelForCausalLM.from_pretrained(
             character_path,
             device_map=self.device,
+            low_cpu_mem_usage=True,
+            torch_dtype=model_dtype,
         ).eval()
         self.tokenizer = AutoTokenizer.from_pretrained(character_path)
         self.audio_tokenizer = BiCodecTokenizer(audio_tokenizer_path, self.device)
+        if self.device.startswith("cuda"):
+            self.audio_tokenizer.feature_extractor.to("cpu")
+            torch.cuda.empty_cache()
 
     @torch.inference_mode()
     def generate(
@@ -109,7 +115,7 @@ class NahidaTTS:
         text: str,
         output_path: Path,
         max_chars: int = 90,
-        max_new_tokens: int = 1024,
+        max_new_tokens: int = 512,
         temperature: float = 0.65,
         top_k: int = 50,
         top_p: float = 1.0,
@@ -182,7 +188,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--model-root", type=Path, default=DEFAULT_MODEL_ROOT)
     parser.add_argument("--max-chars", type=int, default=90)
-    parser.add_argument("--max-new-tokens", type=int, default=1024)
+    parser.add_argument("--max-new-tokens", type=int, default=512)
     parser.add_argument("--temperature", type=float, default=0.65)
     parser.add_argument("--top-k", type=int, default=50)
     parser.add_argument("--top-p", type=float, default=1.0)
