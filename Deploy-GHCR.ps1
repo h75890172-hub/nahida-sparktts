@@ -20,11 +20,6 @@ if ($Action -in @("up", "pull")) {
     $env:HTTPS_PROXY = "http://127.0.0.1:7897"
     $env:HTTP_PROXY = "http://127.0.0.1:7897"
 
-    & $GhPath auth refresh --hostname github.com --scopes read:packages
-    if ($LASTEXITCODE -ne 0) {
-        throw "GitHub authentication refresh failed."
-    }
-
     $token = & $GhPath auth token --hostname github.com
     if ($LASTEXITCODE -ne 0 -or -not $token) {
         throw "Unable to read the GitHub token."
@@ -32,7 +27,15 @@ if ($Action -in @("up", "pull")) {
 
     $token | docker login ghcr.io --username project-maintainer --password-stdin
     if ($LASTEXITCODE -ne 0) {
-        throw "GHCR login failed."
+        & $GhPath auth refresh --hostname github.com --scopes read:packages
+        if ($LASTEXITCODE -ne 0) {
+            throw "GitHub authentication refresh failed."
+        }
+        $token = & $GhPath auth token --hostname github.com
+        $token | docker login ghcr.io --username project-maintainer --password-stdin
+        if ($LASTEXITCODE -ne 0) {
+            throw "GHCR login failed."
+        }
     }
 }
 
