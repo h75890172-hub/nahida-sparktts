@@ -7,3 +7,9 @@ outputs/
 .cache/
 *.pid
 *.log
+.env
+.env.*
+secrets/
+*.key
+*.pem
+*.bundle

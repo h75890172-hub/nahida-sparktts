@@ -1,6 +1,6 @@
 [
   {
-    "file": "reference\\reference\\bilibili\\nahida_pure_voice.wav",
+    "file": "reference/bilibili/nahida_pure_voice.wav",
     "pitch": {
       "median_hz": 272.5210629770105,
       "p10_hz": 230.48950681224102,
@@ -59,7 +59,7 @@
     }
   },
   {
-    "file": "reference\\reference\\bilibili\\nahida_full_voice.wav",
+    "file": "reference/bilibili/nahida_full_voice.wav",
     "pitch": {
       "median_hz": 272.5210629770105,
       "p10_hz": 231.8247189419629,
@@ -118,7 +118,7 @@
     }
   },
   {
-    "file": "reference\\reference\\bilibili\\nahida_hit_voice.wav",
+    "file": "reference/bilibili/nahida_hit_voice.wav",
     "pitch": {
       "median_hz": 541.902914306943,
       "p10_hz": 378.7819907225479,

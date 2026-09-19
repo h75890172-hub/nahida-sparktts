@@ -16,6 +16,22 @@ if (-not (Test-Path -LiteralPath $GhPath)) {
 
 Set-Location -LiteralPath $RootDir
 
+$owner = & $GhPath api user --jq ".login"
+if ($LASTEXITCODE -ne 0 -or -not $owner) {
+    throw "Unable to determine the authenticated GitHub account."
+}
+
+$nameWithOwner = & $GhPath repo view --json nameWithOwner --jq ".nameWithOwner" 2>$null
+if ($LASTEXITCODE -eq 0 -and $nameWithOwner) {
+    $repositoryName = $nameWithOwner.Split("/")[-1]
+} else {
+    $repositoryName = "nahida-sparktts"
+}
+
+if (-not $env:NAHIDA_IMAGE) {
+    $env:NAHIDA_IMAGE = "ghcr.io/$owner/$repositoryName`:main"
+}
+
 if ($Action -in @("up", "pull")) {
     $env:HTTPS_PROXY = "http://127.0.0.1:7897"
     $env:HTTP_PROXY = "http://127.0.0.1:7897"
@@ -25,14 +41,14 @@ if ($Action -in @("up", "pull")) {
         throw "Unable to read the GitHub token."
     }
 
-    $token | docker login ghcr.io --username project-maintainer --password-stdin
+    $token | docker login ghcr.io --username $owner --password-stdin
     if ($LASTEXITCODE -ne 0) {
         & $GhPath auth refresh --hostname github.com --scopes read:packages
         if ($LASTEXITCODE -ne 0) {
             throw "GitHub authentication refresh failed."
         }
         $token = & $GhPath auth token --hostname github.com
-        $token | docker login ghcr.io --username project-maintainer --password-stdin
+        $token | docker login ghcr.io --username $owner --password-stdin
         if ($LASTEXITCODE -ne 0) {
             throw "GHCR login failed."
         }
@@ -50,6 +66,6 @@ switch ($Action) {
         docker compose -f docker-compose.ghcr.yml logs -f --tail 200
     }
     "pull" {
-        docker pull ghcr.io/project-maintainer/nahida-sparktts:main
+        docker pull $env:NAHIDA_IMAGE
     }
 }

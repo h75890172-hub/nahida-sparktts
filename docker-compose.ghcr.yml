@@ -1,6 +1,6 @@
 services:
   nahida-tts:
-    image: ghcr.io/project-maintainer/nahida-sparktts:main
+    image: ${NAHIDA_IMAGE:-nahida-sparktts:latest}
     container_name: nahida-sparktts
     ports:
       - "7861:7861"

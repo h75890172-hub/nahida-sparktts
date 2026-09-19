@@ -21,9 +21,6 @@ MAX_RETRIES = 8
 PARALLEL_THRESHOLD = 64 * 1024 * 1024
 SEGMENT_SIZE = 96 * 1024 * 1024
 MAX_WORKERS = 8
-FALLBACK_ARIA2C = Path(
-    r"<workspace>\FeverGames\1.18.42.12\aria2c.exe"
-)
 
 
 def get_remote_files(repo_id: str, prefix: str) -> list[dict]:
@@ -64,8 +61,6 @@ def find_aria2c() -> str | None:
     discovered = shutil.which("aria2c")
     if discovered:
         return discovered
-    if FALLBACK_ARIA2C.is_file():
-        return str(FALLBACK_ARIA2C)
     return None
 
 

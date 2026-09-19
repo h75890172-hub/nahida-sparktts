@@ -46,7 +46,7 @@ PCM 16-bit，并对超过 0.95 的峰值做安全缩放。
 - 下载器支持断点续传、多连接下载和 SHA-256 校验。
 - Docker 只打包程序与依赖，模型通过只读卷挂载，不复制进镜像。
 - GPU 构建默认使用国内可达的 Docker 镜像源，网络可用时也可切换官方源。
-- GitHub Actions 可自动构建并推送 `ghcr.io/<owner>/nahida-sparktts`。
+- GitHub Actions 可自动构建并推送 `ghcr.io/<owner>/<repository>`。
 
 ## 目录结构
 
@@ -91,9 +91,9 @@ genshin/
 ### 推荐配置
 
 ```text
-Windows 11
+Windows 10/11
 Python 3.12
-<gpu> 或更高
+NVIDIA GPU，建议 8 GB 或更多显存
 NVIDIA 驱动支持 CUDA 11.8 及以上
 Docker Desktop 4.91 或更高
 WSL2
@@ -102,18 +102,12 @@ WSL2
 
 CPU 模式可以运行，但生成速度会明显变慢。
 
-## 仓库地址
-
-```text
-https://github.com/project-maintainer/nahida-sparktts
-```
-
 ## 快速开始
 
 ### 1. 克隆项目
 
 ```powershell
-git clone https://github.com/project-maintainer/nahida-sparktts.git
+git clone <repository-url>
 cd nahida-sparktts
 ```
 
@@ -313,7 +307,7 @@ Transformers、Gradio、Spark-TTS 和 `nahida_tts` 模块可以正常导入。
 镜像地址格式：
 
 ```text
-ghcr.io/project-maintainer/nahida-sparktts:main
+ghcr.io/<owner>/<repository>:main
 ```
 
 私有镜像使用一键脚本完成登录、拉取和启动：
