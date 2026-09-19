@@ -96,7 +96,21 @@ class NahidaTTS:
             torch.backends.cuda.matmul.allow_tf32 = True
             torch.backends.cudnn.allow_tf32 = True
 
-        model_dtype = torch.float16 if self.device.startswith("cuda") else torch.float32
+        dtype_name = os.getenv("MODEL_DTYPE", "float32").lower()
+        dtype_map = {
+            "float16": torch.float16,
+            "fp16": torch.float16,
+            "bfloat16": torch.bfloat16,
+            "bf16": torch.bfloat16,
+            "float32": torch.float32,
+            "fp32": torch.float32,
+        }
+        if dtype_name not in dtype_map:
+            raise ValueError(
+                f"Unsupported MODEL_DTYPE={dtype_name!r}; "
+                "use float32, bfloat16, or float16"
+            )
+        model_dtype = dtype_map[dtype_name]
         self.model = AutoModelForCausalLM.from_pretrained(
             character_path,
             device_map=self.device,
@@ -186,7 +200,7 @@ def parse_args() -> argparse.Namespace:
     text_group.add_argument("--text")
     text_group.add_argument("--input-file", type=Path)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--model-root", type=Path, default=DEFAULT_MODEL_ROOT)
+    parser.add_argument("--model-root", type=Path)
     parser.add_argument("--max-chars", type=int, default=90)
     parser.add_argument("--max-new-tokens", type=int, default=512)
     parser.add_argument("--temperature", type=float, default=0.65)
