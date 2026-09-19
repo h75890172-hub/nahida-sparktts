@@ -14,6 +14,8 @@ import requests
 ENDPOINT = os.getenv("HF_ENDPOINT", "https://hf-mirror.com").rstrip("/")
 BASE_REPO = "wesjos/spark-tts-genshin-charactors"
 CHARACTER_REPO = "wesjos/spark-tts-genshin-charactors-new"
+BASE_REPO_REVISION = "f22c47a417ca8379c70e1388331e25bd0407a61f"
+CHARACTER_REPO_REVISION = "15d4ca3dc31389edd906e6f52bc2c56b2563c57b"
 CHARACTER_FOLDER = "纳西妲"
 OUTPUT_ROOT = Path(__file__).resolve().parent / "genshin"
 CHUNK_SIZE = 8 * 1024 * 1024
@@ -23,10 +25,10 @@ SEGMENT_SIZE = 96 * 1024 * 1024
 MAX_WORKERS = 8
 
 
-def get_remote_files(repo_id: str, prefix: str) -> list[dict]:
+def get_remote_files(repo_id: str, revision: str, prefix: str) -> list[dict]:
     response = requests.get(
         f"{ENDPOINT}/api/models/{repo_id}",
-        params={"blobs": "true"},
+        params={"blobs": "true", "revision": revision},
         timeout=60,
     )
     response.raise_for_status()
@@ -243,7 +245,12 @@ def parallel_download(url: str, destination: Path, expected_size: int) -> None:
     os.replace(partial, destination)
 
 
-def download_file(repo_id: str, item: dict, relative_path: Path) -> None:
+def download_file(
+    repo_id: str,
+    revision: str,
+    item: dict,
+    relative_path: Path,
+) -> None:
     expected_size = int(item["size"])
     expected_sha256 = (item.get("lfs") or {}).get("sha256")
     destination = OUTPUT_ROOT / relative_path
@@ -255,7 +262,7 @@ def download_file(repo_id: str, item: dict, relative_path: Path) -> None:
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     encoded_path = quote(item["rfilename"], safe="/")
-    url = f"{ENDPOINT}/{repo_id}/resolve/main/{encoded_path}"
+    url = f"{ENDPOINT}/{repo_id}/resolve/{revision}/{encoded_path}"
 
     print(
         f"[download] {relative_path} "
@@ -279,20 +286,35 @@ def download_file(repo_id: str, item: dict, relative_path: Path) -> None:
 def main() -> None:
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
-    base_files = get_remote_files(BASE_REPO, "Spark-TTS-0.5B/")
+    base_files = get_remote_files(
+        BASE_REPO,
+        BASE_REPO_REVISION,
+        "Spark-TTS-0.5B/",
+    )
     character_files = get_remote_files(
         CHARACTER_REPO,
+        CHARACTER_REPO_REVISION,
         f"{CHARACTER_FOLDER}/",
     )
     if not character_files:
         raise RuntimeError(f"No remote files found for {CHARACTER_FOLDER}")
 
     for item in base_files:
-        download_file(BASE_REPO, item, Path(item["rfilename"]))
+        download_file(
+            BASE_REPO,
+            BASE_REPO_REVISION,
+            item,
+            Path(item["rfilename"]),
+        )
 
     for item in character_files:
         relative_path = Path(item["rfilename"])
-        download_file(CHARACTER_REPO, item, relative_path)
+        download_file(
+            CHARACTER_REPO,
+            CHARACTER_REPO_REVISION,
+            item,
+            relative_path,
+        )
 
     print(f"Models ready in {OUTPUT_ROOT}")
 

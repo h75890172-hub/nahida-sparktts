@@ -10,3 +10,6 @@ Licensed under the Apache License, Version 2.0.
 The character model and base model are downloaded separately and are not
 distributed by this repository. Character names, game audio, and related
 assets belong to their respective owners.
+
+See PROVENANCE.md for model, dataset, reference-audio, code, and container
+source disclosures.

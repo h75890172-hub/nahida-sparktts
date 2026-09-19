@@ -40,6 +40,10 @@ Use neutral placeholders in documentation and examples:
 Prefer environment variables or runtime discovery over hard-coded account,
 repository, drive, and device values.
 
+Required third-party copyright notices, license texts, public upstream project
+identifiers, and attribution information are exceptions. They must be retained
+when a license or provenance requirement calls for disclosure.
+
 ## Repository Controls
 
 - Keep `.env`, credential files, model weights, audio, logs, caches, PID files,

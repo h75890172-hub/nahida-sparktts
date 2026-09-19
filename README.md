@@ -9,6 +9,9 @@ GitHub Actions 自动构建 GHCR 镜像。
 > 模型权重、游戏音频和角色素材不包含在本仓库中。请自行下载，仅用于个人
 > 学习和实验，不得用于冒充、诈骗、绕过身份验证或未经授权的内容分发。
 
+完整来源、模型卡声明、数据集版权和第三方依赖披露见
+[PROVENANCE.md](PROVENANCE.md)。
+
 ## 项目状态
 
 | 功能 | 状态 |
@@ -123,6 +126,7 @@ python download_nahida.py
 ```
 
 下载完成后会自动校验文件大小。模型文件存在 SHA-256 元数据时还会校验哈希。
+模型仓库 revision 已固定，确保下载文件可复现。
 
 ### 3. 启动 GPU Docker
 
@@ -406,7 +410,8 @@ docker compose config --quiet
 
 应用代码使用 Apache License 2.0。Spark-TTS 组件保留其原始版权和许可证
 声明，详见 [LICENSE](LICENSE) 和 [NOTICE](NOTICE)。隐私与凭据处理要求见
-[SECURITY.md](SECURITY.md)。
+[SECURITY.md](SECURITY.md)。模型、数据集、参考音频和第三方组件来源见
+[PROVENANCE.md](PROVENANCE.md)。
 
 仓库不包含游戏音频、角色语音权重或角色素材。生成内容请明确标注为 AI
 合成语音。不得用于冒充真人、欺诈、骚扰、绕过身份验证、传播违法内容或
