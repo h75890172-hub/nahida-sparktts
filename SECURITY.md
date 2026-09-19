@@ -67,6 +67,21 @@ If a credential is exposed:
 4. Inspect GitHub Actions logs, releases, caches, forks, and package metadata.
 5. Document the incident without repeating the secret.
 
+## Public Hosting Limitations
+
+File-level sanitization cannot hide the account that owns a public GitHub
+repository. The owner handle, public profile, package ownership, fork graph,
+Actions logs, release metadata, and cached commit objects may remain visible.
+
+For stronger separation:
+
+- Transfer or mirror releases to a neutral organization or dedicated project
+  account that contains no personal profile information.
+- Delete and recreate the repository when complete historical anonymity is
+  required instead of relying only on a force push.
+- Contact the hosting provider about cached objects, forks, and stale refs when
+  previously exposed secrets or personal data require verified deletion.
+
 ## Audio And Voice Privacy
 
 - Obtain permission before cloning or publishing another person's voice.
