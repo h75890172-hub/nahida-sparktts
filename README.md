@@ -405,7 +405,8 @@ docker compose config --quiet
 ## 许可证和使用边界
 
 应用代码使用 Apache License 2.0。Spark-TTS 组件保留其原始版权和许可证
-声明，详见 [LICENSE](LICENSE) 和 [NOTICE](NOTICE)。
+声明，详见 [LICENSE](LICENSE) 和 [NOTICE](NOTICE)。隐私与凭据处理要求见
+[SECURITY.md](SECURITY.md)。
 
 仓库不包含游戏音频、角色语音权重或角色素材。生成内容请明确标注为 AI
 合成语音。不得用于冒充真人、欺诈、骚扰、绕过身份验证、传播违法内容或
