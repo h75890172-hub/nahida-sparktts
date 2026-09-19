@@ -304,6 +304,9 @@ push v* 标签
 手动运行 workflow_dispatch
 ```
 
+构建成功后，工作流会额外启动一个临时容器，验证 PyTorch、TorchAudio、
+Transformers、Gradio、Spark-TTS 和 `nahida_tts` 模块可以正常导入。
+
 镜像地址格式：
 
 ```text
@@ -329,6 +332,25 @@ ghcr.io/project-maintainer/nahida-sparktts:main
 ### Docker Hub 连接超时
 
 确认 Compose 使用了 `docker.m.daocloud.io`。也可以切换为企业代理或官方源。
+
+### Docker Desktop 报 `sailor-ingest.sock` 或 `engine.sock`
+
+这是 Docker Desktop 在 Windows 上处理 AF_UNIX socket 重解析点的已知问题。
+先完全退出 Docker Desktop，然后移走以下两个运行目录：
+
+```text
+%LOCALAPPDATA%\Docker\run
+%LOCALAPPDATA%\docker-secrets-engine
+```
+
+再次启动 Docker Desktop。官方维护者确认，在部分主机上还需要重启 Windows
+才能彻底释放旧 socket。不要执行 Clean/Purge data，容器、镜像和卷可以保留。
+
+相关 issue：
+
+```text
+https://github.com/docker/for-win/issues/15063
+```
 
 ### Docker 无法使用 GPU
 
